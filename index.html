@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b0e14">
+<title>LANG TUNG TING — A Motorcycle Odyssey</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app" class="state-title">
+
+  <canvas id="scene" aria-label="Motorcycle game scene"></canvas>
+
+  <!-- ============ HUD ============ -->
+  <div id="hud" class="layer hud">
+    <div class="hud-top">
+      <div class="hud-run">
+        <div class="hud-kicker" id="hud-level">NEON OVERPASS</div>
+        <div class="hud-time" id="hud-time">00:00.00</div>
+        <div class="hud-delta" id="hud-delta"></div>
+      </div>
+
+      <div class="hud-progress">
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+          <div class="progress-ticks" id="progress-ticks"></div>
+          <div class="progress-bike" id="progress-bike"><span></span></div>
+        </div>
+        <div class="progress-labels">
+          <span>START</span><span id="progress-pct">0%</span><span>FINISH</span>
+        </div>
+      </div>
+
+      <div class="hud-best">
+        <div class="hud-kicker">BEST</div>
+        <div class="best-time" id="hud-best">--:--.--</div>
+        <button class="icon-btn" id="btn-pause" title="Pause (Esc)">II</button>
+      </div>
+    </div>
+
+    <div class="hud-bottom">
+      <div class="speedo">
+        <div class="speed-value"><span id="speed-num">0</span><span class="speed-unit">KM/H</span></div>
+        <div class="speed-bar"><div id="speed-fill"></div></div>
+      </div>
+      <div class="air-stats">
+        <div class="air-row"><span class="hud-kicker">TOTAL AIR</span><span id="air-total">0.0s</span></div>
+        <div class="air-row"><span class="hud-kicker">BIGGEST</span><span id="air-best">0.0s</span></div>
+      </div>
+    </div>
+
+    <div class="air-pop" id="air-pop"></div>
+    <div class="toast" id="toast"></div>
+    <div class="countdown" id="countdown"></div>
+    <div class="wind-lines" id="wind-lines"></div>
+  </div>
+
+  <!-- ============ TOUCH ============ -->
+  <div id="touch" class="layer touch">
+    <div class="touch-pad touch-steer">
+      <button class="tbtn" data-act="leanLeft" aria-label="Lean back">&#9650;</button>
+      <button class="tbtn" data-act="leanRight" aria-label="Lean forward">&#9660;</button>
+    </div>
+    <div class="touch-pad touch-drive">
+      <button class="tbtn brake" data-act="brake" aria-label="Brake">BRK</button>
+      <button class="tbtn gas" data-act="throttle" aria-label="Throttle">GAS</button>
+    </div>
+    <button class="tbtn tbtn-small tbtn-top" data-act="pause" aria-label="Pause">II</button>
+    <button class="tbtn tbtn-small tbtn-reset" data-act="reset" aria-label="Reset to checkpoint">R</button>
+  </div>
+
+  <!-- ============ SCREENS ============ -->
+  <div id="screens" class="layer screens">
+
+    <section class="screen" id="screen-title">
+      <div class="title-scrim"></div>
+      <div class="title-inner">
+        <div class="title-kicker">A MOTORCYCLE ODYSSEY</div>
+        <h1 class="game-title">
+          <span>Motor</span><span class="title-accent">Magix</span>
+        </h1>
+        <p class="title-sub">Four roads. Long airs. One long way home.</p>
+        <div class="title-actions">
+          <button class="btn primary" id="btn-ride">RIDE</button>
+          <button class="btn ghost" id="btn-sound" aria-label="Toggle sound">SOUND ON</button>
+        </div>
+        <div class="title-controls">
+          <div><kbd>W</kbd><kbd>&uarr;</kbd><span>throttle</span></div>
+          <div><kbd>S</kbd><kbd>&darr;</kbd><span>brake</span></div>
+          <div><kbd>A</kbd><kbd>D</kbd><span>lean / air control</span></div>
+          <div><kbd>R</kbd><span>reset</span></div>
+          <div><kbd>Esc</kbd><span>pause</span></div>
+        </div>
+      </div>
+      <div class="title-footer">
+        <span>BEST RIDE <b id="title-best">--:--.--</b></span>
+        <span class="title-credit">built for the long way round</span>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-select">
+      <div class="select-inner">
+        <header class="select-head">
+          <button class="btn small ghost" id="btn-back-title">&larr; BACK</button>
+          <div>
+            <div class="title-kicker">THE ROADBOOK</div>
+            <h2>CHOOSE YOUR ROAD</h2>
+          </div>
+          <div class="select-total"><span class="hud-kicker">TOTAL RIDE</span><span id="select-total">0:00</span></div>
+        </header>
+        <div class="cards" id="level-cards"></div>
+        <footer class="select-foot">
+          <span>Hold <kbd>W</kbd> to fly. Lean with <kbd>A</kbd>/<kbd>D</kbd> in the air.</span>
+          <span>Beat your best time for the gold.</span>
+        </footer>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-pause">
+      <div class="panel pause-panel">
+        <div class="title-kicker">TAKE A BREATH</div>
+        <h2>PAUSED</h2>
+        <div class="panel-actions">
+          <button class="btn primary" id="btn-resume">RESUME</button>
+          <button class="btn ghost" id="btn-restart">RESTART</button>
+          <button class="btn ghost" id="btn-quit">ROADBOOK</button>
+        </div>
+        <div class="pause-meta"><span id="pause-time">00:00.00</span> · <span id="pause-level">NEON OVERPASS</span></div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-results">
+      <div class="panel results-panel">
+        <div class="title-kicker" id="results-kicker">RIDE COMPLETE</div>
+        <h2 id="results-title">NEON OVERPASS</h2>
+        <div class="results-medal" id="results-medal"><span class="medal-disc"></span><span class="medal-label">GOLD</span></div>
+        <div class="results-time" id="results-time">00:00.00</div>
+        <div class="results-note" id="results-note">NEW PERSONAL BEST</div>
+        <div class="results-grid">
+          <div><span class="hud-kicker">BEST</span><b id="res-best">--:--.--</b></div>
+          <div><span class="hud-kicker">TOTAL AIR</span><b id="res-air">0.0s</b></div>
+          <div><span class="hud-kicker">BIGGEST AIR</span><b id="res-bigair">0.0s</b></div>
+          <div><span class="hud-kicker">TOP SPEED</span><b id="res-speed">0 km/h</b></div>
+        </div>
+        <div class="panel-actions">
+          <button class="btn primary" id="btn-next">NEXT ROAD</button>
+          <button class="btn ghost" id="btn-retry">RIDE AGAIN</button>
+          <button class="btn ghost" id="btn-results-quit">ROADBOOK</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-rotate">
+      <div class="rotate-inner">
+        <div class="rotate-icon"></div>
+        <div class="title-kicker">BETTER IN LANDSCAPE</div>
+        <p>Turn your device sideways for the full view.</p>
+        <button class="btn small ghost" id="btn-rotate-dismiss">PLAY ANYWAY</button>
+      </div>
+    </section>
+
+  </div>
+
+  <div id="debug" class="debug"></div>
+  <div class="grain-overlay"></div>
+</div>
+
+<script src="js/util.js"></script>
+<script src="js/input.js"></script>
+<script src="js/terrain.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/bike.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/render.js"></script>
+<script src="js/render-art.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

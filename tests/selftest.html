@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>LTT physics selftest</title></head>
+<body>
+<pre id="out">running</pre>
+<script src="../js/util.js"></script>
+<script src="../js/terrain.js"></script>
+<script src="../js/levels.js"></script>
+<script src="../js/bike.js"></script>
+<script>
+/* Headless physics harness: builds every road, checks terrain continuity,
+   settles the bike, then runs full-throttle to the finish.
+   Open directly or via the local server; read the <pre> block. */
+(function () {
+  const L = window.LTT;
+  const out = [];
+  const dt = 1 / 120;
+
+  function log(s) { out.push(s); }
+
+  try {
+    for (let lv = 0; lv < L.LEVELS.length; lv++) {
+      const level = L.LEVELS[lv];
+      const track = L.createTrack(lv);
+
+      /* terrain continuity + the biggest single surface step */
+      let maxStep = 0, worstAt = 0, nan = false;
+      let prev = track.heightAt(0);
+      for (let x = 0.2; x < track.length; x += 0.2) {
+        const h = track.heightAt(x);
+        if (!isFinite(h)) { nan = true; break; }
+        const d = Math.abs(h - prev);
+        if (d > maxStep) { maxStep = d; worstAt = x; }
+        prev = h;
+      }
+
+      const bike = new L.Bike(track);
+      bike.resetAt(30);
+      const settled = Math.abs(bike.y - track.heightAt(bike.x)) < 1.5 && !bike.crashed;
+
+      let jumps = 0, maxAir = 0, crashes = 0, t = 0;
+      for (let i = 0; i < 120 * 400; i++) {
+        bike.update(dt, { throttle: 1, brake: 0, lean: 0 });
+        t = i / 120;
+        if (bike.justLanded) {
+          jumps++;
+          if (bike.lastAir > maxAir) maxAir = bike.lastAir;
+        }
+        if (!isFinite(bike.x) || !isFinite(bike.angle)) { nan = true; break; }
+        if (bike.crashed) { crashes++; break; }
+        if (bike.x > track.finishX) break;
+      }
+
+      log(
+        level.id.padEnd(8) +
+        ' len=' + level.length +
+        ' step@' + worstAt.toFixed(0) + '=' + maxStep.toFixed(2) +
+        ' settle=' + (settled ? 'ok' : 'BAD') +
+        ' finish=' + bike.x.toFixed(0) + '/' + track.finishX.toFixed(0) +
+        ' t=' + t.toFixed(1) + 's' +
+        ' gold=' + level.targets.gold.toFixed(0) + 's' +
+        (t < level.targets.gold ? ' (under)' : ' (over)') +
+        ' jumps=' + jumps +
+        ' air=' + maxAir.toFixed(2) +
+        ' top=' + (bike.topSpeed * 3.6).toFixed(0) + 'kmh' +
+        ' crashes=' + crashes +
+        (nan ? ' NaN!' : '')
+      );
+    }
+    log('all levels simulated');
+  } catch (e) {
+    log('ERROR ' + (e && e.stack ? e.stack : String(e)));
+  }
+
+  document.getElementById('out').textContent = out.join('\n');
+  document.title = 'DONE';
+})();
+</script>
+</body>
+</html>
