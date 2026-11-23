@@ -1,4 +1,4 @@
-/* LANG TUNG TING — game loop, run state, timing */
+/* Motor Magix — game loop, run state, timing */
 (function () {
   'use strict';
   const LTT = (window.LTT = window.LTT || {});

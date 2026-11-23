@@ -1,4 +1,4 @@
-﻿/* LANG TUNG TING â€” painterly scenery, props, rider and post */
+﻿/* Motor Magix â€” painterly scenery, props, rider and post */
 (function () {
   'use strict';
   const LTT = (window.LTT = window.LTT || {});

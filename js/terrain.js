@@ -1,4 +1,4 @@
-/* LANG TUNG TING — smooth heightfield tracks */
+/* Motor Magix — smooth heightfield tracks */
 (function () {
   'use strict';
   const LTT = (window.LTT = window.LTT || {});

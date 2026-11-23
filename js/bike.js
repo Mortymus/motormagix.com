@@ -1,4 +1,4 @@
-/* LANG TUNG TING — rigid chassis + spring/damper suspension + tires */
+/* Motor Magix — rigid chassis + spring/damper suspension + tires */
 (function () {
   'use strict';
   const LTT = (window.LTT = window.LTT || {});

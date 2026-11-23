@@ -1,4 +1,4 @@
-/* LANG TUNG TING — shared math & helpers */
+/* Motor Magix — shared math & helpers */
 (function () {
   'use strict';
   const LTT = (window.LTT = window.LTT || {});

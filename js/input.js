@@ -1,4 +1,4 @@
-/* LANG TUNG TING — keyboard, touch and smoothed analog input */
+/* Motor Magix — keyboard, touch and smoothed analog input */
 (function () {
   'use strict';
   const LTT = (window.LTT = window.LTT || {});

@@ -1,4 +1,4 @@
-/* LANG TUNG TING — screens, HUD, saves */
+/* Motor Magix — screens, HUD, saves */
 (function () {
   'use strict';
   const LTT = (window.LTT = window.LTT || {});

@@ -1,4 +1,4 @@
-/* LANG TUNG TING — procedural 80s/90s-flavoured music and ride sound */
+/* Motor Magix — procedural 80s/90s-flavoured music and ride sound */
 (function () {
   'use strict';
   const LTT = (window.LTT = window.LTT || {});

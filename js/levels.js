@@ -1,4 +1,4 @@
-﻿/* LANG TUNG TING â€” four roads, four skies */
+﻿/* Motor Magix â€” four roads, four skies */
 (function () {
   'use strict';
   const LTT = (window.LTT = window.LTT || {});

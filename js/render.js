@@ -1,4 +1,4 @@
-/* LANG TUNG TING — camera, pseudo-3D terrain, particles, post */
+/* Motor Magix — camera, pseudo-3D terrain, particles, post */
 (function () {
   'use strict';
   const LTT = (window.LTT = window.LTT || {});
